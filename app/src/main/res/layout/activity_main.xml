@@ -60,16 +60,30 @@
 
 
     <Button
-        android:id="@+id/uraza"
+        android:id="@+id/res"
         android:layout_width="127dp"
         android:layout_height="132dp"
-        android:text="Результат"
+        android:text="Папка \n Результата"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.056"
+        app:layout_constraintHorizontal_bias="0.866"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.604" />
+        app:layout_constraintVertical_bias="0.599" />
+
+    <Button
+        android:id="@+id/ramadan"
+        android:layout_width="127dp"
+        android:layout_height="132dp"
+        android:text="Рамадан"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.169"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.599" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

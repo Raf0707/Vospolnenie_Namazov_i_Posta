@@ -22,6 +22,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Button today = findViewById(R.id.today);
         today.setOnClickListener(this);
+
+        Button ramadan = findViewById(R.id.ramadan);
+        ramadan.setOnClickListener(this);
     }
 
     @Override
@@ -32,13 +35,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent namaz = new Intent(this, EditNamazActivity.class);
                 startActivity(namaz);
                 break;
+
             case R.id.post:
                 Intent post = new Intent(this, DolgPostActivity.class);
                 startActivity(post);
                 break;
+
             case R.id.today:
                 Intent today = new Intent(this, TodayNamasActivity.class);
                 startActivity(today);
+                break;
+
+            case R.id.ramadan:
+                Intent ramadan = new Intent(this, RamadanActivity.class);
+                startActivity(ramadan);
                 break;
         }
     }

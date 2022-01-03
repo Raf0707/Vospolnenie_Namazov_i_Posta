@@ -11,14 +11,19 @@ public class CountDolgNamazActivity extends AppCompatActivity implements View.On
     private EditText tsel;
     private TextView podschet;
     private Button ok;
+    private int dolg;
+    public int dney;
+    private int namazov;
+    private String strDney;
+    private String strNamazov;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_count_dolg_namaz);
 
-        Button start = findViewById(R.id.back);
-        start.setOnClickListener(this);
+        Button starter = findViewById(R.id.startt);
+        starter.setOnClickListener(this);
 
         tsel = findViewById(R.id.tsel);
         podschet = findViewById(R.id.podschet);
@@ -31,15 +36,21 @@ public class CountDolgNamazActivity extends AppCompatActivity implements View.On
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ok:
-                int dolg = Integer.parseInt(tsel.getText().toString());
-                int dney = dolg * 365;
-                int namazov = dolg * 365 * 6;
-                String strDney = Integer.toString(dney);
-                String strNamazov = Integer.toString(namazov);
-                podschet.setText("Вам надо восполнить долг за " + strDney + " дней, совершить " + strNamazov + " намазов. ");
+                dolg = Integer.parseInt(tsel.getText().toString());
+                if (dolg <= 0) {
+                    Toast.makeText(this, "Введите число больше нуля",Toast.LENGTH_SHORT).show();
+                    break;
+                }
+                dney = dolg * 365;
+                namazov = dolg * 365 * 6;
+                strDney = Integer.toString(dney);
+                strNamazov = Integer.toString(namazov);
+                podschet.setText(String.format("Вам надо восполнить долг за %s дней, совершить %s намазов. ", strDney, strNamazov));
                 break;
+
             case R.id.startt:
                 Intent start = new Intent(this, DolgNamazActivity.class);
+                start.putExtra("dney", dney);
                 startActivity(start);
         }
     }
