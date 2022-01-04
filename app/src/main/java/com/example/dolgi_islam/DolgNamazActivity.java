@@ -9,6 +9,8 @@ import android.widget.*;
 
 import androidx.appcompat.app.*;
 
+import java.lang.ref.*;
+
 public class DolgNamazActivity extends AppCompatActivity implements View.OnClickListener {
     private CheckBox fajr;
     private CheckBox fadjr_fard;
@@ -22,8 +24,8 @@ public class DolgNamazActivity extends AppCompatActivity implements View.OnClick
     private CheckBox isha_fard;
     private CheckBox witr_vajib;
 
-    private TextView vosp;
-    private TextView ost;
+    public TextView vosp;
+    public TextView ost;
 
     private int dolg;
     private int sdel;
@@ -32,6 +34,9 @@ public class DolgNamazActivity extends AppCompatActivity implements View.OnClick
     private Button plus;
     private Button minus;
 
+    public static WeakReference <DolgNamazActivity> weakReference = null;
+
+    public SharedPreferences sPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +47,12 @@ public class DolgNamazActivity extends AppCompatActivity implements View.OnClick
         vosp = findViewById(R.id.vospolnil);
         ost = findViewById(R.id.ostalos);
         int this_dolg = getIntent().getIntExtra("dney", 0);
+        String this_save_dolg = Integer.toString(this_dolg);
         ost.setText(Integer.toString(this_dolg));
         ost.setTextColor(Color.rgb(18,112,90));
         vosp.setText("0");
+
+        weakReference = new WeakReference<>(this);
 
         reset = findViewById(R.id.reset);
         reset.setOnClickListener(this);
@@ -151,6 +159,8 @@ public class DolgNamazActivity extends AppCompatActivity implements View.OnClick
             }
         });
 
+        loadText();
+
     }
 
     private void checkAllFajrCheckedChange(boolean isChecked)  {
@@ -205,12 +215,6 @@ public class DolgNamazActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-
-
-
-
-
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -220,6 +224,10 @@ public class DolgNamazActivity extends AppCompatActivity implements View.OnClick
                 break;
 
             case R.id.reset:
+
+                ost.setText(Integer.toString((Integer.parseInt(vosp.getText().toString())) + (Integer.parseInt(ost.getText().toString()))));
+                vosp.setText("0");
+
                 this.fajr.setChecked(false);
                 this.fadjr_fard.setChecked(false);
                 this.zuckhr.setChecked(false);
@@ -281,5 +289,29 @@ public class DolgNamazActivity extends AppCompatActivity implements View.OnClick
                 break;
 
         }
+    }
+
+    public void saveText() {
+        sPref = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor ed = sPref.edit();
+        ed.putString("Восполнил", vosp.getText().toString());
+        ed.putString("Осталось", ost.getText().toString());
+        ed.apply();
+        //Toast.makeText(this, "Text saved", Toast.LENGTH_SHORT).show();
+    }
+
+    public void loadText() {
+        sPref = getPreferences(MODE_PRIVATE);
+        String vospText = sPref.getString("Восполнил", vosp.getText().toString());
+        String ostText = sPref.getString("Осталось", ost.getText().toString());
+        vosp.setText(vospText);
+        ost.setText(ostText);
+        //Toast.makeText(this, "Text loaded", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onDestroy() {
+        saveText();
+        super.onDestroy();
     }
 }

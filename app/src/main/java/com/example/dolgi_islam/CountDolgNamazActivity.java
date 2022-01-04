@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
 
+import java.lang.ref.*;
+
 public class CountDolgNamazActivity extends AppCompatActivity implements View.OnClickListener {
     private EditText tsel;
     private TextView podschet;
@@ -16,6 +18,7 @@ public class CountDolgNamazActivity extends AppCompatActivity implements View.On
     private int namazov;
     private String strDney;
     private String strNamazov;
+    public static final DolgNamazActivity DOLG_NAMAZ_ACTIVITY = DolgNamazActivity.weakReference.get();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,10 +28,15 @@ public class CountDolgNamazActivity extends AppCompatActivity implements View.On
         Button starter = findViewById(R.id.startt);
         starter.setOnClickListener(this);
 
+        Button nazad = findViewById(R.id.nazad);
+        nazad.setOnClickListener(this);
+
         tsel = findViewById(R.id.tsel);
         podschet = findViewById(R.id.podschet);
         ok = findViewById(R.id.ok);
         ok.setOnClickListener(this);
+
+        DOLG_NAMAZ_ACTIVITY.loadText();
 
     }
 
@@ -49,9 +57,28 @@ public class CountDolgNamazActivity extends AppCompatActivity implements View.On
                 break;
 
             case R.id.startt:
-                Intent start = new Intent(this, DolgNamazActivity.class);
-                start.putExtra("dney", dney);
-                startActivity(start);
+                if (tsel.getText().toString().length() == 0) {
+                    Toast.makeText(this, "Введите цель",Toast.LENGTH_SHORT).show();
+                    break;
+                } else {
+                    DOLG_NAMAZ_ACTIVITY.ost.setText(tsel.getText().toString());
+                    DOLG_NAMAZ_ACTIVITY.vosp.setText("0");
+                    Intent start = new Intent(this, DolgNamazActivity.class);
+                    start.putExtra("dney", dney);
+                    startActivity(start);
+                    break;
+                }
+
+            case R.id.nazad:
+                Intent nazad = new Intent(this, EditNamazActivity.class);
+                startActivity(nazad);
+                break;
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        DOLG_NAMAZ_ACTIVITY.saveText();
+        super.onDestroy();
     }
 }
